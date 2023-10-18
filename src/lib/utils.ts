@@ -1,16 +1,13 @@
 import { COLOR_NAMES } from "~/utils/ionic/colors";
-import type { ColorName, HexColor } from "./types";
 import { generateColor } from "~/utils/ionic";
 
-export function isCustomColor(name: ColorName): boolean {
-  return !(
-    COLOR_NAMES.find(n => n.toLowerCase() === name.toLowerCase()) !== undefined
-  );
+export function isCustomColor(name: string): boolean {
+  return !(COLOR_NAMES.find(n => n.toLowerCase() === name) !== undefined);
 }
 
 export function getColorStyles(
-  name: ColorName,
-  color: HexColor,
+  name: string,
+  color: string,
   opts: { selector: string },
 ): string {
   const clr = generateColor(color);
@@ -26,15 +23,14 @@ ${opts.selector} {
 }`.trim();
 }
 
-export function getCustomColorClassStyles(name: ColorName): string {
-  const x = name.toLowerCase();
+export function getCustomColorClassStyles(name: string): string {
   return `
-.ion-color-${x} {
-  --ion-color-base: var(--ion-color-${x});
-  --ion-color-base-rgb: var(--ion-color-${x}-rgb);
-  --ion-color-contrast: var(--ion-color-${x}-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-${x}-contrast-rgb);
-  --ion-color-shade: var(--ion-color-${x}-shade);
-  --ion-color-tint: var(--ion-color-${x}-tint);
+.ion-color-${name} {
+  --ion-color-base: var(--ion-color-${name});
+  --ion-color-base-rgb: var(--ion-color-${name}-rgb);
+  --ion-color-contrast: var(--ion-color-${name}-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-${name}-contrast-rgb);
+  --ion-color-shade: var(--ion-color-${name}-shade);
+  --ion-color-tint: var(--ion-color-${name}-tint);
 }`.trim();
 }

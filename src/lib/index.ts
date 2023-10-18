@@ -1,4 +1,4 @@
-import type { ColorName, HexColor, ColorConfig } from "./types";
+import type { ColorName, ColorConfig, ColorValue } from "./types";
 import {
   getColorStyles,
   getCustomColorClassStyles,
@@ -17,28 +17,31 @@ const DEFAULT_OPTIONS: Options = {
 };
 
 export function injectIonicColor(
-  name: ColorName,
-  color: HexColor | ColorConfig,
+  colorName: ColorName,
+  colorValue: ColorValue,
   options?: Partial<Options>,
 ) {
-  name = name.toLowerCase();
-  const clr: ColorConfig = typeof color === "string" ? { light: color } : color;
+  const clrName: string = colorName.toLowerCase();
+  const clr: ColorConfig =
+    typeof colorValue === "string" ? { light: colorValue } : colorValue;
   const opts: Options = Object.assign(DEFAULT_OPTIONS, options);
 
   const stylesToInject: string[] = [];
 
   if (clr.light) {
-    stylesToInject.push(getColorStyles(name, clr.light, { selector: ":root" }));
+    stylesToInject.push(
+      getColorStyles(clrName, clr.light, { selector: ":root" }),
+    );
   }
 
   if (clr.dark) {
     stylesToInject.push(
-      getColorStyles(name, clr.dark, { selector: ":root .dark" }),
+      getColorStyles(clrName, clr.dark, { selector: ":root .dark" }),
     );
   }
 
-  if (opts.addClass && isCustomColor(name)) {
-    stylesToInject.push(getCustomColorClassStyles(name));
+  if (opts.addClass && isCustomColor(clrName)) {
+    stylesToInject.push(getCustomColorClassStyles(clrName));
   }
 
   const css = stylesToInject.join("\n");
@@ -62,7 +65,7 @@ export function injectIonicColor(
   // remove existing style element
   if (opts.replaceExisting) {
     const existingStyleEl = targetEl.querySelectorAll(
-      `style[data-ion-color="${name}"]`,
+      `style[data-ion-color="${clrName}"]`,
     )?.[0];
     if (existingStyleEl) {
       existingStyleEl.remove();
@@ -70,7 +73,7 @@ export function injectIonicColor(
   }
 
   const styleEl = document.createElement("style");
-  styleEl.dataset["ionColor"] = name as string;
+  styleEl.dataset["ionColor"] = clrName;
   styleEl.appendChild(document.createTextNode(css));
   targetEl.appendChild(styleEl);
 }
