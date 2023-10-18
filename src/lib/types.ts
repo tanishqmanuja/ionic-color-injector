@@ -13,3 +13,5 @@ export type ColorConfig = {
 };
 
 export type ColorValue = HexColor | ColorConfig;
+
+export type LightDarkOptional<T> = T | { light?: T; dark?: T };

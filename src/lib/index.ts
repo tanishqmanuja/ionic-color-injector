@@ -1,4 +1,9 @@
-import type { ColorName, ColorConfig, ColorValue } from "./types";
+import type {
+  ColorName,
+  ColorConfig,
+  ColorValue,
+  LightDarkOptional,
+} from "./types";
 import {
   getColorStyles,
   getCustomColorClassStyles,
@@ -9,19 +14,13 @@ type Options = {
   target?: HTMLElement;
   addClass: boolean;
   replaceExisting: boolean;
-  selector: {
-    light: string;
-    dark?: string;
-  };
+  selector: LightDarkOptional<string>;
 };
 
 const DEFAULT_OPTIONS = {
   addClass: true,
   replaceExisting: true,
-  selector: {
-    light: ":root",
-    dark: ":root .dark",
-  },
+  selector: ":root",
 } satisfies Options;
 
 export function injectIonicColor(
@@ -32,22 +31,26 @@ export function injectIonicColor(
   const clrName: string = colorName.toLowerCase();
   const clr: ColorConfig =
     typeof colorValue === "string" ? { light: colorValue } : colorValue;
-  const opts: Options & typeof DEFAULT_OPTIONS = Object.assign(
-    DEFAULT_OPTIONS,
-    options,
-  );
+  const opts: Options = Object.assign(DEFAULT_OPTIONS, options);
 
   const stylesToInject: string[] = [];
 
+  const selectorLight =
+    typeof opts.selector === "string" ? opts.selector : opts.selector.light!;
+  const selectorDark =
+    typeof opts.selector === "object" && opts.selector.dark
+      ? opts.selector.dark
+      : `${selectorLight} .dark`;
+
   if (clr.light) {
     stylesToInject.push(
-      getColorStyles(clrName, clr.light, { selector: opts.selector.light }),
+      getColorStyles(clrName, clr.light, { selector: selectorLight }),
     );
   }
 
   if (clr.dark) {
     stylesToInject.push(
-      getColorStyles(clrName, clr.dark, { selector: opts.selector.dark }),
+      getColorStyles(clrName, clr.dark, { selector: selectorDark }),
     );
   }
 
