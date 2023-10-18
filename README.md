@@ -4,9 +4,23 @@ Ionic Color Injector is a utility that injects ionic colors with generated css v
 
 ## Installation
 
-```bash
-npm install @tqman/ionic-color-injector
-```
+- via npm
+
+  ```bash
+  npm install @tqman/ionic-color-injector
+  ```
+
+- via pnpm
+
+  ```bash
+  pnpm add @tqman/ionic-color-injector
+  ```
+
+- via bun
+
+  ```bash
+  bun install @tqman/ionic-color-injector
+  ```
 
 ## Usage
 
