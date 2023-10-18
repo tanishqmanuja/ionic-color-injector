@@ -6,15 +6,23 @@ import {
 } from "./utils";
 
 type Options = {
-  target?: HTMLElement | null;
+  target?: HTMLElement;
   addClass: boolean;
   replaceExisting: boolean;
+  selector: {
+    light: string;
+    dark?: string;
+  };
 };
 
-const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS = {
   addClass: true,
   replaceExisting: true,
-};
+  selector: {
+    light: ":root",
+    dark: ":root .dark",
+  },
+} satisfies Options;
 
 export function injectIonicColor(
   colorName: ColorName,
@@ -24,19 +32,22 @@ export function injectIonicColor(
   const clrName: string = colorName.toLowerCase();
   const clr: ColorConfig =
     typeof colorValue === "string" ? { light: colorValue } : colorValue;
-  const opts: Options = Object.assign(DEFAULT_OPTIONS, options);
+  const opts: Options & typeof DEFAULT_OPTIONS = Object.assign(
+    DEFAULT_OPTIONS,
+    options,
+  );
 
   const stylesToInject: string[] = [];
 
   if (clr.light) {
     stylesToInject.push(
-      getColorStyles(clrName, clr.light, { selector: ":root" }),
+      getColorStyles(clrName, clr.light, { selector: opts.selector.light }),
     );
   }
 
   if (clr.dark) {
     stylesToInject.push(
-      getColorStyles(clrName, clr.dark, { selector: ":root .dark" }),
+      getColorStyles(clrName, clr.dark, { selector: opts.selector.dark }),
     );
   }
 
