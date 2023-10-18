@@ -1,0 +1,40 @@
+{
+  "git": {
+    "tagName": "v${version}",
+    "commitMessage": "chore: release v${version}",
+    "pushRepo": "https://github.com/tanishqmanuja/ionic-color-injector",
+    "requireBranch": "main"
+  },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}"
+  },
+  "npm": {
+    "publish": true
+  },
+  "hooks": {
+    "before:init": ["pnpm lint"],
+    "after:bump": ["pnpm build"]
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {
+            "type": "feat",
+            "section": "Features 🎉"
+          },
+          {
+            "type": "fix",
+            "section": "Bug Fixes 🐛"
+          },
+          {
+            "type": "refactor",
+            "section": "Refactor 📚"
+          }
+        ]
+      }
+    }
+  }
+}

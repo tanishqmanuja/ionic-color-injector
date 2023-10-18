@@ -1,0 +1,9 @@
+# Ignore everything
+/*
+
+# Except
+!src
+!README.md
+!tsconfig.json
+!tsup.config.ts
+!release-it.json

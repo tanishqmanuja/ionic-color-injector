@@ -1,0 +1,11 @@
+# deps
+node_modules
+
+# build
+dist
+
+# configs
+.npmrc
+
+# env
+.env

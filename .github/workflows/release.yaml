@@ -1,0 +1,44 @@
+name: Release & Publish to NPM
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - package.json
+  #     - src/**
+
+jobs:
+  release:
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Repository
+        uses: ./.github/actions/setup
+
+      - name: Init Git User
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+      - name: Init NPM Config
+        run: npm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run ReleaseIt
+        run: pnpm release --ci
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
