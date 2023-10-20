@@ -1,3 +1,5 @@
+![Logo](https://raw.github.com/tanishqmanuja/ionic-color-injector/main/assets/banner.png?maxAge=2592000)
+
 # Ionic Color Injector
 
 Ionic Color Injector is a utility that injects ionic colors with generated css variables into the a html element at runtime.
